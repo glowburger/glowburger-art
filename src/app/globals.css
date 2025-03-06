@@ -24,3 +24,12 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@layer components {
+  @media (max-width: 768px) {
+    .grid {
+      grid-auto-rows: minmax(0, 1fr);
+      height: calc(100vh - theme(spacing.32));
+    }
+  }
+}
