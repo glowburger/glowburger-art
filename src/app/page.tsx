@@ -77,9 +77,11 @@ export default function Home() {
       
       <footer className="mt-8 py-4 text-center bg-black/5 dark:bg-white/5 rounded-lg">
         <div className="space-y-1">
-          <p className="text-lg font-semibold">im open to collabs</p>
+          <p className="text-lg font-semibold">
+            im open to collabs
+          </p>
           <p className="text-sm opacity-80 hover:opacity-100 transition-opacity">
-            let's glow together
+            let&apos;s glow together
           </p>
         </div>
       </footer>
