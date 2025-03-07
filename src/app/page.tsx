@@ -9,7 +9,7 @@ const albums = [
     id: 1,
     title: "Fun Guy Series",
     images: [
-      "/Halloween Fun Guy (provoked).gif",
+      "/0001-0144.mp4",
       "/Fun Guy Terrains Ghost.gif",
       "/base gif.gif"
     ]
@@ -43,8 +43,35 @@ const albums = [
   }
 ];
 
+// Add this video component
+const MediaDisplay = ({ src }: { src: string }) => {
+  const isVideo = src.endsWith('.mp4') || src.endsWith('.webm');
+
+  return isVideo ? (
+    <video
+      autoPlay
+      loop
+      muted
+      playsInline
+      className="w-full h-full object-cover"
+    >
+      <source src={src} type="video/mp4" />
+    </video>
+  ) : (
+    <Image
+      src={src}
+      alt=""
+      fill
+      className="object-cover"
+      sizes="(max-width: 768px) 50vw, 25vw"
+    />
+  );
+};
+
 export default function Home() {
   const [currentIndices, setCurrentIndices] = useState([0, 0, 0, 0]);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
   const handleClick = (albumIndex: number) => {
     setCurrentIndices(prev => {
@@ -54,37 +81,61 @@ export default function Home() {
     });
   };
 
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
   return (
     <div className="h-screen p-8 font-[family-name:var(--font-geist-sans)] flex flex-col">
       <h1 className="text-4xl font-bold text-center mb-8">glowburger art</h1>
-      <main className="grid grid-cols-2 gap-4 flex-1 w-full h-full">
-        {albums.map((album, index) => (
-          <div 
-            key={album.id}
-            className="relative w-full h-full cursor-pointer group"
-            onClick={() => handleClick(index)}
-          >
-            <Image
-              src={album.images[currentIndices[index]]}
-              alt={`${album.title} - Image ${currentIndices[index] + 1}`}
-              fill
-              className="object-cover transition-opacity group-hover:opacity-80"
-              sizes="(max-width: 768px) 50vw, 25vw"
-            />
-          </div>
-        ))}
-      </main>
       
-      <footer className="mt-8 py-4 text-center bg-black/5 dark:bg-white/5 rounded-lg">
-        <div className="space-y-1">
-          <p className="text-lg font-semibold">
-            im open to collabs
-          </p>
-          <p className="text-sm opacity-80 hover:opacity-100 transition-opacity">
-            let&apos;s glow together
-          </p>
-        </div>
-      </footer>
+      <div className="flex-1 flex items-center justify-center">
+        <main className="grid grid-cols-2 h-[90vh] w-[90vh] gap-4 p-4">
+          {albums.map((album, index) => (
+            <div 
+              key={album.id}
+              className="relative aspect-square w-full h-full cursor-pointer group overflow-hidden rounded-2xl"
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              onClick={() => handleClick(index)}
+            >
+              {/* Media Content Layer */}
+              <div className="relative z-10 h-full w-full">
+                <div className={`
+                  absolute inset-0 transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]
+                  ${hoveredIndex === index ? 'scale-110' : ''}
+                  ${hoveredIndex !== null && hoveredIndex !== index ? 'scale-[0.98] blur-sm' : ''}
+                `}>
+                  <MediaDisplay src={album.images[currentIndices[index]]} />
+                </div>
+              </div>
+
+              {/* Effects Layer */}
+              <div className="absolute inset-0 z-20">
+                <div className={`
+                  absolute inset-0 bg-gradient-to-b from-purple-500/5 to-pink-500/3 mix-blend-lighten transition-opacity duration-500
+                  ${hoveredIndex === index ? 'opacity-100' : 'opacity-0'}
+                `} />
+
+                <div className={`
+                  absolute inset-0 shadow-[0_0_60px_15px] shadow-purple-400/20 
+                  transition-opacity duration-500
+                  ${hoveredIndex === index ? 'opacity-100' : 'opacity-0'}
+                `} />
+
+                <div className={`
+                  absolute inset-0 backdrop-blur-md transition-opacity duration-500
+                  ${hoveredIndex !== null && hoveredIndex !== index ? 'opacity-50' : 'opacity-0'}
+                `} />
+              </div>
+
+              {/* Border Layer */}
+              <div className="absolute inset-0 rounded-2xl border-2 border-gray-100 transition-all duration-500 group-hover:border-gray-200/50 z-30" />
+            </div>
+          ))}
+        </main>
+      </div>
     </div>
   );
 }

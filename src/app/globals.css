@@ -12,13 +12,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
@@ -31,5 +24,42 @@ body {
       grid-auto-rows: minmax(0, 1fr);
       height: calc(100vh - theme(spacing.32));
     }
+    .model-viewer-container {
+      height: 300px !important;
+    }
+    main {
+      width: 100vw !important;
+      height: 100vw !important;
+      max-height: calc(100vh - 12rem);
+    }
+  }
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+  }
+  
+  .group {
+    overflow: hidden;
+    transition: 
+      transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.4s ease-out;
+  }
+
+  .group:hover {
+    transform: translateZ(10px);
+  }
+
+  video {
+    filter: saturate(1.1) contrast(0.9) brightness(1.05);
+    transition: filter 0.4s ease-out;
+  }
+
+  .group:hover video {
+    filter: saturate(1.2) contrast(0.85) brightness(1.1);
+  }
+
+  .group::before {
+    content: '';
+    @apply absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(192,132,252,0.1)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500;
   }
 }
