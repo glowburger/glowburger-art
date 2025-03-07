@@ -71,7 +71,7 @@ const MediaDisplay = ({ src }: { src: string }) => {
 export default function Home() {
   const [currentIndices, setCurrentIndices] = useState([0, 0, 0, 0]);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  
 
   const handleClick = (albumIndex: number) => {
     setCurrentIndices(prev => {
@@ -81,10 +81,7 @@ export default function Home() {
     });
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-  };
+ 
 
   return (
     <div className="h-screen p-8 font-[family-name:var(--font-geist-sans)] flex flex-col">
