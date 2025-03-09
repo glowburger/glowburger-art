@@ -2,6 +2,7 @@
 
 * {
   font-family: var(--font-ibm-plex-mono);
+  text-shadow: 0 0 5px rgba(147, 51, 234, 0.5);
 }
 
 :root {
@@ -17,8 +18,13 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: #000 !important;
+  color: #8b5cf6 !important;
+  overflow: hidden !important;
+}
+
+html {
+  overflow: hidden !important;
 }
 
 @layer components {
@@ -37,8 +43,8 @@ body {
     }
   }
   .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(4, minmax(0, 1fr));
   }
   
   .group {
@@ -58,12 +64,60 @@ body {
   }
 
   .group:hover video {
-    filter: saturate(1.2) contrast(0.85) brightness(1.1);
+    filter: saturate(1.2) contrast(0.85) brightness(1.1) hue-rotate(-5deg);
   }
 
   .group::before {
     content: '';
     @apply absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(192,132,252,0.1)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500;
+  }
+
+  .absolute > video,
+  .absolute > img {
+    @apply h-full w-full object-cover;
+  }
+
+  .group video {
+    filter: grayscale(100%) contrast(120%) brightness(0.8);
+    transition: filter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .group:hover video {
+    filter: grayscale(0%) contrast(100%) brightness(1);
+  }
+
+  .group:hover .origin-center {
+    transform: translateZ(50px);
+  }
+  
+  .group:hover video,
+  .group:hover img {
+    transition: 
+      left 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      top 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      filter 0.3s ease;
+  }
+
+  .group:hover .grayscale {
+    filter: contrast(100%) brightness(1);
+  }
+
+  .group:hover .object-scale-down {
+    object-fit: scale-down;
+    width: auto;
+    height: auto;
+    max-width: min(90vw, 1000px);
+    max-height: min(90vh, 1000px);
+  }
+  
+  .group:hover video {
+    @apply w-auto h-auto;
+  }
+
+  .object-scale-down {
+    object-fit: scale-down;
   }
 }
 
@@ -157,4 +211,178 @@ body {
 
 .chat-slide-in-left {
   animation: slide-in-left 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes scramble-characters {
+  0% { 
+    transform: translate(-1px, -1px);
+    opacity: 0.8;
+  }
+  50% { 
+    transform: translate(1px, 1px);
+    opacity: 1;
+  }
+  100% { 
+    transform: translate(0);
+    opacity: 0.8;
+  }
+}
+
+@keyframes text-glitch {
+  0%, 100% {
+    transform: translate(0);
+    text-shadow: none;
+  }
+  25% {
+    transform: translate(-1px, 1px);
+    text-shadow: -2px 0 red, 2px 0 blue;
+  }
+  50% {
+    transform: translate(1px, -1px);
+    text-shadow: 2px 0 blue, -2px 0 red;
+  }
+  75% {
+    transform: translate(-1px, -1px);
+    text-shadow: -2px 0 blue, 2px 0 red;
+  }
+}
+
+.animate-text-glitch {
+  animation: text-glitch 1s infinite steps(1);
+}
+
+.animate-scramble-characters {
+  animation: scramble-characters 0.8s infinite alternate steps(2);
+}
+
+/* Modify typewriter animation */
+@keyframes typewriter {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes fade-in {
+  to { opacity: 1 }
+}
+
+@keyframes blink {
+  50% { opacity: 0 }
+}
+
+.animate-typewriter {
+  animation: typewriter 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.1s forwards;
+}
+
+.animate-blink {
+  animation: blink 1s infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .model-viewer-container {
+    height: 200px !important;
+  }
+  
+  main {
+    padding: 1rem !important;
+  }
+}
+
+/* Add grayscale transition */
+.grayscale-100 {
+  filter: grayscale(100%);
+}
+
+.group:hover .grayscale-100 {
+  filter: grayscale(0%);
+}
+
+/* Add Y2K scanlines effect */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0) 50%,
+    rgba(129, 140, 248, 0.1) 51%,
+    rgba(0, 0, 0, 0) 52%
+  );
+  background-size: 100% 3px;
+  animation: scanline 0.8s linear infinite;
+  z-index: 9999;
+}
+
+@keyframes scanline {
+  from { transform: translateY(-3px) }
+  to { transform: translateY(0) }
+}
+
+/* Add CRT screen curvature effect */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0,0,0,0) 60%,
+    rgba(0,0,0,0.3) 100%
+  );
+  z-index: 9998;
+}
+
+/* Add terminal-style progress animation */
+@keyframes progress {
+  from { transform: translateX(-100%) }
+  to { transform: translateX(0) }
+}
+
+.animate-progress {
+  animation: progress 2s ease-out forwards;
+}
+
+/* Add floating particle effect */
+@keyframes float {
+  0% { transform: translateY(0) rotate(0deg) }
+  50% { transform: translateY(-20px) rotate(180deg) }
+  100% { transform: translateY(0) rotate(360deg) }
+}
+
+.particle::after {
+  content: "■";
+  position: absolute;
+  color: rgba(16, 185, 129, 0.1);
+  animation: float 8s infinite linear;
+}
+
+/* Unified grid background */
+.left-panel-grid {
+  background-image: 
+    linear-gradient(rgba(147, 51, 234, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(147, 51, 234, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.text-purple-300 {
+  color: #d8b4fe;
+}
+
+.border-purple-400/30 {
+  border-color: rgb(192 132 252 / 0.3);
 }
