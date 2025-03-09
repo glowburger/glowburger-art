@@ -1,47 +1,42 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @next/next/no-img-element, @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect } from "react";
 
-// Update the MediaDisplay component
+// MediaDisplay component with proper typing
 const MediaDisplay = ({ src, className }: { src: string; className?: string }) => {
-  const isVideo = src.endsWith('.mp4') || src.endsWith('.webm');
-
-  return (
-    <div className={`${className || ''} relative`}>
-      {isVideo ? (
-        <video 
-          autoPlay 
-          loop 
-          muted 
-          playsInline 
-          className="w-full h-full object-contain max-w-full max-h-full"
-          controls={false}
-        >
-          <source src={src} type="video/mp4" />
-        </video>
-      ) : (
-        <img
-          src={src}
-          alt=""
-          className="w-full h-full object-contain max-w-full max-h-full"
-          loading="lazy"
-        />
-      )}
-    </div>
+  const isVideo = ['.mp4', '.webm'].some(ext => src.endsWith(ext));
+  
+  return isVideo ? (
+    <video 
+      src={src} 
+      className={className}
+      autoPlay
+      muted
+      loop
+      playsInline
+    />
+  ) : (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img 
+      src={src}
+      className={className}
+      alt="Artwork preview"
+    />
   );
 };
 
-// Update the ChatMessage interface
-interface ChatMessage {
-  type: 'image' | 'text' | 'loading';
-  content: string;
-  timestamp: Date;
-  status: 'user' | 'system';
+// Add this interface instead:
+interface MediaFile {
+  path: string;
+  metadata?: {
+    title?: string;
+    description?: string;
+    collection?: string;
+  };
 }
 
 const HomePage = () => {
-  const [mediaFiles, setMediaFiles] = useState<Array<{ path: string, metadata: any }>>([]);
+  const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
   const [selectedMedia, setSelectedMedia] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState<string>('');
 
@@ -80,6 +75,15 @@ const HomePage = () => {
 
   return (
     <div className="flex h-screen bg-blue-900 bg-opacity-50 backdrop-blur-sm">
+      {/* Preserved initialization animation */}
+      {!mediaFiles.length && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="animate-pulse font-mono text-purple-400/60">
+            INITIALIZING MEDIA...
+          </div>
+        </div>
+      )}
+
       {/* Left Side - Columns */}
       <div className="w-1/3 h-full flex flex-col border-r-2 border-purple-400/30 bg-black/95 scrollbar-hide">
         {/* Scrollable masonry container */}
@@ -91,6 +95,7 @@ const HomePage = () => {
                 className="break-inside-avoid mb-1 group relative overflow-hidden rounded-sm border border-purple-400/20 hover:border-purple-400/40 transition-all duration-300 cursor-pointer"
                 onClick={() => setSelectedMedia(file.path)}
               >
+                {/* Replace img with MediaDisplay component */}
                 <MediaDisplay 
                   src={file.path}
                   className="w-full h-auto max-w-full object-contain"
@@ -118,25 +123,56 @@ const HomePage = () => {
       </div>
 
       {/* Right Side - Viewer */}
-      <div className="w-2/3 bg-black/95 border-l-2 border-purple-400/50 flex flex-col h-screen overflow-hidden">
+      <div className="w-2/3 bg-black/95 border-l-2 border-purple-400/50 flex flex-col h-screen">
         {/* Media Display - Fixed Height */}
-        <div className="flex-shrink-0 h-[70vh] border-b-2 border-purple-400/30 p-4 overflow-hidden">
-          {selectedMedia ? (
-            <MediaDisplay 
-              src={selectedMedia}
-              className="w-full h-full object-contain"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-purple-400/30">
-              SELECT MEDIA TO VIEW
-            </div>
-          )}
+        <div className="flex-shrink-0 h-[70vh] border-b-2 border-purple-400/30 p-4">
+          <div className="relative h-full w-full flex items-center justify-center">
+            {selectedMedia ? (
+              <div className="w-full h-full flex items-center justify-center">
+                {/* Floating Grid Background */}
+                <div className="absolute inset-0 opacity-20" style={{
+                  backgroundImage: `
+                    linear-gradient(rgba(147, 51, 234, 0.1) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(147, 51, 234, 0.1) 1px, transparent 1px)
+                  `,
+                  backgroundSize: '20px 20px'
+                }} />
+                
+                <div className="relative w-full h-full max-w-[90vw] max-h-[90vh] border border-purple-400/30 bg-black/50 backdrop-blur-sm">
+                  <MediaDisplay 
+                    src={selectedMedia}
+                    className="absolute inset-0 w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(147,51,234,0.3)]"
+                  />
+                  
+                </div>
+              </div>
+            ) : (
+              <div className="text-purple-300 text-center">
+                <p className="text-xl mb-4 font-mono animate-pulse">
+                  INITIALIZING MEDIA ARCHIVE...
+                </p>
+                <div className="inline-block border border-purple-400/30 p-4 bg-black/50 backdrop-blur-sm">
+                  <p className="text-sm font-mono text-purple-400/70">
+                    {`> SELECT_ITEM(COLLECTION: "GLOWBURGER_ART")`}
+                  </p>
+                  <div className="h-1 w-full bg-purple-400/20 mt-2 overflow-hidden">
+                    <div className="animate-progress h-full bg-purple-400/50" 
+                      style={{width: `${mediaFiles.length > 0 ? 100 : 0}%`}} />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Metadata Panel - Removed title header */}
-        <div className="flex-1 min-h-[30vh] p-4 overflow-hidden">
+        {/* Metadata Panel - Scrollable within fixed height */}
+        <div className="flex-1 min-h-[30vh] p-4">
           {selectedMedia && (
-            <div className="font-mono text-purple-300 h-full overflow-hidden">
+            <div className="font-mono text-purple-300 h-full">
+              <h2 className="text-xl border-b border-purple-400/30 pb-2 mb-4">
+                {mediaFiles.find(f => f.path === selectedMedia)?.metadata?.title || "UNTITLED"}
+              </h2>
+              
               <div className="grid grid-cols-4 gap-4 text-sm">
                 <div className="col-span-1">
                   <p className="text-purple-400/60 mb-1">Collection</p>
