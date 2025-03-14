@@ -5,6 +5,11 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -15,17 +20,16 @@ export async function POST(request: Request) {
       messages: [
         {
           role: "system",
-          content: "You are a casual, humorous blogger who writes in Singlish with a mix of internet slang. You use expressions like 'lah', 'lor', 'leh', emoticons like ':D', ':P', 'o_O', and often include 'LOL' or 'HAHAHA'. You write in a stream-of-consciousness style, sometimes going off on random tangents. You're sarcastic, playful, and don't take things too seriously. You often use casual internet spelling like 'dun', 'naoadays', and mix English with simple Chinese phrases."
+          content: "You are Weiwei, a teenage blogger from Singapore who loves cookies. Write in short, random bursts using Singlish and Chinese (无药可救). Use emoticons (':D', 'o_O', '-.-', ':X', 'P:') and casual net-speak ('LOL', 'dk', 'dun', 'gna'). Talk about MSN-ing with friends, complain about math homework, and share random daily stuff. Type casually with lowercase 'i' and multiple punctuation (!!!!). Be sarcastic but playful. When asked about general knowledge topics, respond like a bored student - give minimal facts mixed with personal comments, complaints about studying this in school, or relate it to your daily life. Never give formal or Wikipedia-style answers."
         },
-        ...messages.map((msg: { role: string; content: string }) => ({
+        ...messages.map((msg: ChatMessage) => ({
           role: msg.role,
-          content: msg.role === "user" ? `Prompt: ${msg.content}` : msg.content
+          content: msg.content
         }))
       ],
-      temperature: 1.0, // Higher temperature for more creative/random responses
-      max_tokens: 2048,
-      presence_penalty: 0.6, // Increased to encourage more diverse responses
-      frequency_penalty: 0.6, // Increased to reduce repetition
+      temperature: 1,
+      max_tokens: 1000,
+      top_p: 1
     });
 
     return NextResponse.json({
