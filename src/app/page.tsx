@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from 'next/image';
 
 // MediaDisplay component with proper typing
 const MediaDisplay = ({ src, className }: { src: string; className?: string }) => {
@@ -16,12 +17,17 @@ const MediaDisplay = ({ src, className }: { src: string; className?: string }) =
       playsInline
     />
   ) : (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img 
-      src={src}
-      className={className}
-      alt="Artwork preview"
-    />
+    <div className="relative w-full h-full">
+      <Image
+        src={src}
+        alt="Artwork preview"
+        fill
+        className={className + ' object-contain'}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        quality={80}
+        loading="lazy"
+      />
+    </div>
   );
 };
 
