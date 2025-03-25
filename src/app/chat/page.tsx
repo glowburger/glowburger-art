@@ -185,6 +185,8 @@ const ChatPage = () => {
                 loop
                 muted
                 playsInline
+                crossOrigin="anonymous"
+                onError={(e) => console.error('Video loading error:', e)}
               />
             </div>
           </div>

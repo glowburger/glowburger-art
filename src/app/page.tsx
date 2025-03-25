@@ -14,12 +14,17 @@ import {
 
 const API_BASE_URL = 'https://api.glowburger.art/api/media';
 
+const formatPathForApi = (folder: string, filename: string) => {
+  const formattedFolder = folder.replace(/ /g, '-');
+  return `${API_BASE_URL}/${formattedFolder}/${encodeURIComponent(filename)}`;
+};
+
 // MediaDisplay component with proper typing
 const MediaDisplay = ({ src, className }: { src: string; className?: string }) => {
   const cleanSrc = src.startsWith('/') ? src.slice(1) : src;
   const [folder, ...filenameParts] = cleanSrc.split('/');
   const filename = filenameParts.join('/');
-  const apiUrl = `${API_BASE_URL}/${folder}/${encodeURIComponent(filename)}`;
+  const apiUrl = formatPathForApi(folder, filename);
   
   const isVideo = ['.mp4', '.webm'].some(ext => filename.toLowerCase().endsWith(ext));
   const isGif = filename.toLowerCase().endsWith('.gif');
@@ -86,7 +91,7 @@ const MediaDisplayRaw = ({ src }: { src: string }) => {
   const cleanSrc = src.startsWith('/') ? src.slice(1) : src;
   const [folder, ...filenameParts] = cleanSrc.split('/');
   const filename = filenameParts.join('/');
-  const apiUrl = `${API_BASE_URL}/${folder}/${encodeURIComponent(filename)}`;
+  const apiUrl = formatPathForApi(folder, filename);
   
   const isVideo = ['.mp4', '.webm'].some(ext => filename.toLowerCase().endsWith(ext));
   const isGif = filename.toLowerCase().endsWith('.gif');
