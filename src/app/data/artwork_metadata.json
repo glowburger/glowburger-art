@@ -247,13 +247,6 @@
         "collection": "burgers"
       }
     },
-    "/burgers/base gif": {
-      "metadata": {
-        "title": "Base Gif",
-        "description": "Add description here",
-        "collection": "burgers"
-      }
-    },
     "/burgers/Common.gif": {
       "metadata": {
         "title": "Common",
