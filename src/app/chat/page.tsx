@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import Image from 'next/image';
+import Link from 'next/link';
 
 // Type for chat messages
 interface ChatMessage {
@@ -116,17 +116,58 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="flex h-screen bg-blue-900 bg-opacity-50 backdrop-blur-sm">
+    <div className="flex h-screen bg-white">
       {/* Left Container - Image */}
-      <div className="w-1/2 h-full flex items-center justify-center border-r-2 border-purple-400/30 bg-black/95">
+      <div className="w-1/2 h-full flex items-center justify-center border-r border-[#4A4A4A]/20 bg-white/95">
+        {/* Back Button */}
+        <Link
+          href="/"
+          className="
+            absolute
+            top-4
+            left-4
+            z-50
+            px-4
+            py-2
+            bg-white
+            border
+            border-[#4A4A4A]/20
+            rounded-sm
+            font-mono
+            text-sm
+            text-[#4A4A4A]/70
+            hover:bg-[#4A4A4A]/5
+            hover:border-[#4A4A4A]/40
+            transition-colors
+            flex
+            items-center
+            gap-2
+          "
+        >
+          <svg 
+            className="w-4 h-4" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M10 19l-7-7m0 0l7-7m-7 7h18" 
+            />
+          </svg>
+          GO BACK
+        </Link>
+
         <div className="relative w-full h-full">
           {/* Floating Grid Background */}
           <div 
             className="absolute inset-0 opacity-20" 
             style={{
               backgroundImage: `
-                linear-gradient(rgba(147, 51, 234, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(147, 51, 234, 0.1) 1px, transparent 1px)
+                linear-gradient(rgba(74, 74, 74, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(74, 74, 74, 0.1) 1px, transparent 1px)
               `,
               backgroundSize: '20px 20px'
             }} 
@@ -134,10 +175,10 @@ const ChatPage = () => {
           
           {/* Video Player */}
           <div className="absolute inset-0 flex items-center justify-center p-4">
-            <div className="relative w-full h-full border border-purple-400/30 bg-black/50 backdrop-blur-sm rounded-lg overflow-hidden">
+            <div className="relative w-full h-full border border-[#4A4A4A]/20 bg-white/50 rounded-lg overflow-hidden">
               <video
-                src="/chat/chat art.mp4"
-                className="w-full h-full object-cover filter drop-shadow-[0_0_15px_rgba(147,51,234,0.3)]"
+                src="/machine garden/computer.mp4"
+                className="w-full h-full object-cover filter drop-shadow-[0_0_15px_rgba(74,74,74,0.3)]"
                 autoPlay
                 loop
                 muted
@@ -149,31 +190,41 @@ const ChatPage = () => {
       </div>
 
       {/* Right Container - Chat */}
-      <div className="w-1/2 h-full bg-black/95 flex flex-col">
+      <div className="w-1/2 h-screen bg-white flex flex-col">
         {/* Chat Messages Area */}
-        <div className="flex-1 overflow-y-auto p-4 relative">
+        <div className="flex-1 overflow-y-auto relative">
           {/* Sticky Connection Header */}
           {isConnected && (
-            <div className="sticky top-0 z-10 bg-black/95 border-b border-purple-400/30 pb-3 mb-4">
+            <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-[#4A4A4A]/20 p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(168,85,247,0.5)]" />
-                  <span className="font-mono text-purple-300/80 text-sm">CONNECTION ESTABLISHED</span>
+                  <div className="
+                    w-2 
+                    h-2 
+                    bg-[#00ffd5] 
+                    rounded-full 
+                    animate-pulse 
+                    shadow-[0_0_8px_#00ffd5] 
+                    relative
+                    after:content-['']
+                    after:absolute
+                    after:inset-0
+                    after:rounded-full
+                    after:shadow-[0_0_12px_#00ffd5]
+                    after:animate-pulse
+                  " />
+                  <span className="font-mono text-[#4A4A4A]/70 text-sm">CONNECTION ESTABLISHED</span>
                 </div>
-                {/* Stylized Badge */}
-                <div className="px-3 py-1 bg-purple-900/30 border border-purple-400/30 rounded-sm font-mono text-xs text-purple-300/70 backdrop-blur-sm shadow-[0_0_15px_rgba(168,85,247,0.2)] relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-purple-400/5 to-purple-500/10 animate-pulse" />
-                  <div className="relative">
-                    GLOW'S PERSONAL TIMECAPSULE 4
-                  </div>
+                <div className="px-3 py-1 bg-[#4A4A4A]/5 border border-[#4A4A4A]/20 rounded-sm font-mono text-xs text-[#4A4A4A]/70">
+                  GLOW&apos;S PERSONAL TIMECAPSULE 4
                 </div>
               </div>
             </div>
           )}
 
-          <div className="space-y-4">
+          <div className="p-4 space-y-4">
             {isInitializing ? (
-              <div className="text-purple-300/60 font-mono text-center animate-pulse">
+              <div className="text-[#4A4A4A]/60 font-mono text-center animate-pulse">
                 INITIALIZING CHAT INTERFACE...
               </div>
             ) : (
@@ -185,8 +236,8 @@ const ChatPage = () => {
                   <div
                     className={`max-w-[80%] p-3 rounded-sm ${
                       message.role === 'user'
-                        ? 'bg-purple-400/20 text-purple-300'
-                        : 'bg-purple-900/20 text-purple-200'
+                        ? 'bg-[#4A4A4A]/5 text-[#4A4A4A]'
+                        : 'bg-[#4A4A4A]/10 text-[#4A4A4A]'
                     } font-mono chat-slide-in-${message.role === 'user' ? 'right' : 'left'}`}
                   >
                     <div className="text-sm">{message.content}</div>
@@ -200,8 +251,8 @@ const ChatPage = () => {
             
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-purple-900/20 text-purple-200 p-3 rounded-sm font-mono animate-pulse max-w-[80%]">
-                  <div className="text-sm">Processing...</div>
+                <div className="bg-[#4A4A4A]/5 text-[#4A4A4A] p-3 rounded-sm font-mono animate-pulse max-w-[80%]">
+                  <div className="text-sm">...</div>
                   <div className="text-xs opacity-50 mt-1">
                     {new Date().toLocaleTimeString()}
                   </div>
@@ -220,13 +271,11 @@ const ChatPage = () => {
                 <button
                   key={index}
                   onClick={() => handleSuggestionClick(suggestion)}
-                  className="px-4 py-2 bg-purple-900/30 border border-purple-400/30 
-                    rounded-sm font-mono text-xs text-purple-300/70 
-                    hover:bg-purple-400/20 hover:border-purple-400/50 
-                    transition-colors cursor-pointer backdrop-blur-sm
-                    shadow-[0_0_15px_rgba(168,85,247,0.1)]
-                    text-center whitespace-nowrap
-                    opacity-0 animate-fade-in-up"
+                  className="px-4 py-2 bg-[#4A4A4A]/5 border border-[#4A4A4A]/20 
+                    rounded-sm font-mono text-xs text-[#4A4A4A]/70 
+                    hover:bg-[#4A4A4A]/10 hover:border-[#4A4A4A]/40 
+                    transition-colors cursor-pointer
+                    text-center whitespace-nowrap"
                   style={{
                     animationDelay: `${index * 150}ms`,
                     animationFillMode: 'forwards'
@@ -240,7 +289,7 @@ const ChatPage = () => {
         )}
 
         {/* Chat Input Area */}
-        <div className="border-t-2 border-purple-400/30 p-4">
+        <div className="border-t border-[#4A4A4A]/20 p-4">
           <div className="relative flex gap-2">
             <textarea
               ref={inputRef}
@@ -258,7 +307,9 @@ const ChatPage = () => {
                 }
               }}
               placeholder="Enter your message..."
-              className="flex-1 bg-black/50 border-2 border-purple-400/30 rounded-sm px-4 py-2 text-purple-300 font-mono focus:outline-none focus:border-purple-400/60 placeholder-purple-400/30 resize-none min-h-[40px] max-h-[160px]"
+              className="flex-1 bg-[#4A4A4A]/5 border border-[#4A4A4A]/20 rounded-sm px-4 py-2 
+                text-[#4A4A4A] font-mono focus:outline-none focus:border-[#4A4A4A]/40 
+                placeholder-[#4A4A4A]/30 resize-none min-h-[40px] max-h-[160px]"
               disabled={isLoading}
               rows={1}
             />
@@ -271,8 +322,8 @@ const ChatPage = () => {
               disabled={isLoading || !inputMessage.trim()}
               className={`px-4 py-2 rounded-sm font-mono text-sm transition-colors ${
                 isLoading || !inputMessage.trim()
-                  ? 'bg-purple-400/20 text-purple-300/50 cursor-not-allowed'
-                  : 'bg-purple-400/30 text-purple-300 hover:bg-purple-400/40 cursor-pointer'
+                  ? 'bg-[#4A4A4A]/20 text-[#4A4A4A]/50 cursor-not-allowed'
+                  : 'bg-[#4A4A4A] text-white hover:bg-[#4A4A4A]/80 cursor-pointer'
               }`}
             >
               {isLoading ? 'SENDING...' : 'SEND'}

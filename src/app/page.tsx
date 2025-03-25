@@ -177,14 +177,54 @@ const HomePage = () => {
       <header className="sticky top-0 z-50 bg-white border-b border-[#4A4A4A]/20">
         <div className="max-w-screen-xl mx-auto p-6">
           <div className="flex items-center justify-between">
-            {/* Artist Name and Description */}
+            {/* Artist Name, Description and Chat Button */}
             <div>
-              <h1 className="font-mono text-2xl font-bold text-[#4A4A4A]">
-                GLOWBURGER
-              </h1>
-              <p className="font-mono text-sm text-[#4A4A4A]/70 mt-1">
-                artist from singapore
-              </p>
+              <div className="flex items-center gap-4">
+                <h1 className="font-mono text-2xl font-bold text-[#4A4A4A]">
+                  GLOWBURGER
+                </h1>
+                <div className="flex items-center gap-4">
+                  <p className="font-mono text-sm text-[#4A4A4A]/70">
+                    artist from singapore, currently working on
+                  </p>
+                  
+                  {/* Chat Button */}
+                  <a 
+                    href="/chat"
+                    className="
+                      relative
+                      font-mono 
+                      text-sm 
+                      text-[#4A4A4A]
+                      px-4 
+                      py-1.5
+                      bg-white
+                      border 
+                      border-[#4A4A4A]/20
+                      rounded-2xl
+                      transition-all
+                      duration-300
+                      ease-out
+                      overflow-visible
+                      glitch-button
+                      hover:border-[#4A4A4A]/40
+                      hover:bg-white/90
+                      group
+                    "
+                  >
+                    <span className="
+                      relative 
+                      z-10 
+                      gradient-text
+                      transition-all
+                      duration-300
+                      group-hover:scale-105
+                    ">
+                      chat with my inner child {'>>>'} 
+                    </span>
+                  </a>
+                </div>
+              </div>
             </div>
 
             {/* Social Links */}

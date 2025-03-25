@@ -426,3 +426,131 @@ body::after {
 .animate-slide-in-right {
   animation: slide-in-right 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
+
+/* Add these new keyframes for the glitch effect */
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes glitch-text {
+  0% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 1;
+  }
+  31% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.75;
+  }
+  80% {
+    opacity: 1;
+  }
+}
+
+/* Update the glitch button styles */
+@keyframes glitch-button {
+  0% {
+    transform: translate(0);
+    box-shadow: none;
+  }
+  20% {
+    transform: translate(-2px, 2px);
+    box-shadow: -2px 0 #ff00c1, 2px 0 #3498db;
+  }
+  40% {
+    transform: translate(-2px, -2px);
+    box-shadow: 2px 0 #ff00c1, -2px 0 #3498db;
+  }
+  60% {
+    transform: translate(2px, 2px);
+    box-shadow: -2px 0 #3498db, 2px 0 #ff00c1;
+  }
+  80% {
+    transform: translate(2px, -2px);
+    box-shadow: 2px 0 #3498db, -2px 0 #ff00c1;
+  }
+  100% {
+    transform: translate(0);
+    box-shadow: none;
+  }
+}
+
+/* Add this new gradient animation for the button text */
+@keyframes gradient-text {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.glitch-button {
+  position: relative;
+  animation: glitch-button 3s infinite linear alternate-reverse;
+  transition: all 0.3s ease;
+}
+
+.glitch-button:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 0 10px rgba(255, 0, 193, 0.2),
+    0 0 20px rgba(52, 152, 219, 0.2);
+  animation-duration: 1.5s;
+}
+
+.glitch-button:hover .gradient-text {
+  background: linear-gradient(
+    90deg,
+    #ff00c1,
+    #3498db,
+    #ff00c1
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: gradient-text 3s linear infinite;
+}
+
+.glitch-button::before,
+.glitch-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: white;
+  border: 1px solid rgba(74, 74, 74, 0.2);
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.glitch-button:hover::before,
+.glitch-button:hover::after {
+  opacity: 0.8;
+}
