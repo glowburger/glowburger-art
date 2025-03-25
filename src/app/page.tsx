@@ -12,13 +12,17 @@ import {
   type MediaFile
 } from '@/atoms/gallery';
 
+const API_BASE_URL = 'https://api.glowburger.art/api/media';
+
 // MediaDisplay component with proper typing
 const MediaDisplay = ({ src, className }: { src: string; className?: string }) => {
   const cleanSrc = src.startsWith('/') ? src.slice(1) : src;
-  const encodedSrc = cleanSrc.split('/').map(part => encodeURIComponent(part)).join('/');
+  const [folder, ...filenameParts] = cleanSrc.split('/');
+  const filename = filenameParts.join('/');
+  const apiUrl = `${API_BASE_URL}/${folder}/${encodeURIComponent(filename)}`;
   
-  const isVideo = ['.mp4', '.webm'].some(ext => encodedSrc.toLowerCase().endsWith(ext));
-  const isGif = encodedSrc.toLowerCase().endsWith('.gif');
+  const isVideo = ['.mp4', '.webm'].some(ext => filename.toLowerCase().endsWith(ext));
+  const isGif = filename.toLowerCase().endsWith('.gif');
   
   const baseStyles = `
     transition-[filter] duration-200 ease-in-out
@@ -27,18 +31,27 @@ const MediaDisplay = ({ src, className }: { src: string; className?: string }) =
     will-change-[filter]
     ${className || ''}
   `;
+
+  const [error, setError] = useState(false);
   
   if (isVideo) {
     return (
       <div className={`relative w-full overflow-hidden ${baseStyles}`}>
         <video 
-          src={`/${encodedSrc}`}
+          src={apiUrl}
           className="w-full h-auto"
           autoPlay
           muted
           loop
           playsInline
+          crossOrigin="anonymous"
+          onError={() => setError(true)}
         />
+        {error && (
+          <div className="absolute inset-0 flex items-center justify-center bg-[#4A4A4A]/10">
+            <span className="font-mono text-sm text-[#4A4A4A]/60">Failed to load media</span>
+          </div>
+        )}
       </div>
     );
   }
@@ -47,7 +60,7 @@ const MediaDisplay = ({ src, className }: { src: string; className?: string }) =
     return (
       <div className="relative w-full overflow-hidden">
         <Image
-          src={`/${encodedSrc}`}
+          src={apiUrl}
           alt="Artwork preview"
           width={1200}
           height={800}
@@ -55,7 +68,14 @@ const MediaDisplay = ({ src, className }: { src: string; className?: string }) =
           quality={80}
           loading="lazy"
           unoptimized={isGif}
+          crossOrigin="anonymous"
+          onError={() => setError(true)}
         />
+        {error && (
+          <div className="absolute inset-0 flex items-center justify-center bg-[#4A4A4A]/10">
+            <span className="font-mono text-sm text-[#4A4A4A]/60">Failed to load media</span>
+          </div>
+        )}
       </div>
     );
   }
@@ -64,23 +84,34 @@ const MediaDisplay = ({ src, className }: { src: string; className?: string }) =
 // Add this new component for raw media display
 const MediaDisplayRaw = ({ src }: { src: string }) => {
   const cleanSrc = src.startsWith('/') ? src.slice(1) : src;
-  const encodedSrc = cleanSrc.split('/').map(part => encodeURIComponent(part)).join('/');
+  const [folder, ...filenameParts] = cleanSrc.split('/');
+  const filename = filenameParts.join('/');
+  const apiUrl = `${API_BASE_URL}/${folder}/${encodeURIComponent(filename)}`;
   
-  const isVideo = ['.mp4', '.webm'].some(ext => encodedSrc.toLowerCase().endsWith(ext));
-  const isGif = encodedSrc.toLowerCase().endsWith('.gif');
+  const isVideo = ['.mp4', '.webm'].some(ext => filename.toLowerCase().endsWith(ext));
+  const isGif = filename.toLowerCase().endsWith('.gif');
   
+  const [error, setError] = useState(false);
+
   if (isVideo) {
     return (
       <div className="relative w-full overflow-hidden">
         <video 
-          src={`/${encodedSrc}`}
+          src={apiUrl}
           className="w-full h-auto"
           autoPlay
           muted
           loop
           playsInline
           controls
+          crossOrigin="anonymous"
+          onError={() => setError(true)}
         />
+        {error && (
+          <div className="absolute inset-0 flex items-center justify-center bg-[#4A4A4A]/10">
+            <span className="font-mono text-sm text-[#4A4A4A]/60">Failed to load media</span>
+          </div>
+        )}
       </div>
     );
   }
@@ -88,7 +119,7 @@ const MediaDisplayRaw = ({ src }: { src: string }) => {
   return (
     <div className="relative w-full overflow-hidden">
       <Image
-        src={`/${encodedSrc}`}
+        src={apiUrl}
         alt="Artwork preview"
         width={2400}
         height={1600}
@@ -96,7 +127,14 @@ const MediaDisplayRaw = ({ src }: { src: string }) => {
         quality={100}
         priority
         unoptimized={isGif}
+        crossOrigin="anonymous"
+        onError={() => setError(true)}
       />
+      {error && (
+        <div className="absolute inset-0 flex items-center justify-center bg-[#4A4A4A]/10">
+          <span className="font-mono text-sm text-[#4A4A4A]/60">Failed to load media</span>
+        </div>
+      )}
     </div>
   );
 };

@@ -2,35 +2,35 @@
   "version": "1.0",
   "lastUpdated": "2024-03-25T00:00:00Z",
   "files": {
-    "/machine garden/thumbnail.mp4": {
+    "/machine-garden/thumbnail.mp4": {
       "metadata": {
         "title": "Machine Garden Thumbnail",
         "description": "Add description here",
         "collection": "machine garden"
       }
     },
-    "/machine garden/sacrifice of isaac 25.mp4": {
+    "/machine-garden/sacrifice of isaac 25.mp4": {
       "metadata": {
         "title": "Sacrifice of Isaac",
         "description": "Add description here",
         "collection": "machine garden"
       }
     },
-    "/machine garden/background 1.gif": {
+    "/machine-garden/background 1.gif": {
       "metadata": {
         "title": "Machine Garden Background",
         "description": "Add description here",
         "collection": "machine garden"
       }
     },
-    "/bob is ded/thumbnail.gif": {
+    "/bob-is-ded/thumbnail.gif": {
       "metadata": {
         "title": "Bob is Ded Thumbnail",
         "description": "Add description here",
         "collection": "bob is ded"
       }
     },
-    "/bob is ded/bob is ded_scene 3.2.gif": {
+    "/bob-is-ded/bob is ded_scene 3.2.gif": {
       "metadata": {
         "title": "Bob is Ded Scene 3.2",
         "description": "Add description here",
@@ -72,7 +72,7 @@
         "collection": "collabs"
       }
     },
-    "/fun guys/thumbnail.gif": {
+    "/fun-guys/thumbnail.gif": {
       "metadata": {
         "title": "Fun Guys Thumbnail",
         "description": "Add description here",
@@ -247,7 +247,7 @@
         "collection": "burgers"
       }
     },
-    "/burgers/base gif.gif": {
+    "/burgers/base gif": {
       "metadata": {
         "title": "Base Gif",
         "description": "Add description here",
@@ -268,7 +268,7 @@
         "collection": "burgers"
       }
     },
-    "/collabs/ultimate auction thumbnail gif.gif": {
+    "/collabs/ultimate auction thumbnail .gif": {
       "metadata": {
         "title": "Ultimate Auction Thumbnail",
         "description": "Add description here",
@@ -324,133 +324,133 @@
         "collection": "collabs"
       }
     },
-    "/fun guys/Halloween Fun Guy (provoked).gif": {
+    "/fun-guys/Halloween Fun Guy (provoked).gif": {
       "metadata": {
         "title": "Halloween Fun Guy (Provoked)",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/Fun Guy Terrains Ghost.gif": {
+    "/fun-guys/Fun Guy Terrains Ghost.gif": {
       "metadata": {
         "title": "Fun Guy Terrains Ghost",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/0001-0025-ezgif.com-optimize.gif": {
+    "/fun-guys/0001-0025-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Fun Guy Animation",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/machine garden/square.png": {
+    "/machine-garden/square.png": {
       "metadata": {
         "title": "Square",
         "description": "Add description here",
         "collection": "machine garden"
       }
     },
-    "/machine garden/0001-01432-ezgif.com-optimize.gif": {
+    "/machine-garden/0001-01432-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Machine Garden Animation 1",
         "description": "Add description here",
         "collection": "machine garden"
       }
     },
-    "/machine garden/cookies.mp4": {
+    "/machine-garden/cookies.mp4": {
       "metadata": {
         "title": "Cookies",
         "description": "Add description here",
         "collection": "machine garden"
       }
     },
-    "/machine garden/computer.mp4": {
+    "/machine-garden/computer.mp4": {
       "metadata": {
         "title": "Computer",
         "description": "Add description here",
         "collection": "machine garden"
       }
     },
-    "/machine garden/accepting cookies.png": {
+    "/machine-garden/accepting cookies.png": {
       "metadata": {
         "title": "Accepting Cookies",
         "description": "Add description here",
         "collection": "machine garden"
       }
     },
-    "/machine garden/0057-0144-ezgif.com-optimize.gif": {
+    "/machine-garden/0057-0144-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Machine Garden Animation 2",
         "description": "Add description here",
         "collection": "machine garden"
       }
     },
-    "/machine garden/0214-0323-ezgif.com-optimize.gif": {
+    "/machine-garden/0214-0323-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Machine Garden Animation 3",
         "description": "Add description here",
         "collection": "machine garden"
       }
     },
-    "/machine garden/0543.png": {
+    "/machine-garden/0543.png": {
       "metadata": {
         "title": "0543",
         "description": "Add description here",
         "collection": "machine garden"
       }
     },
-    "/bob is ded/GUMBALL.mp4": {
+    "/bob-is-ded/GUMBALL.mp4": {
       "metadata": {
         "title": "Gumball",
         "description": "Add description here",
         "collection": "bob is ded"
       }
     },
-    "/bob is ded/1.2-ezgif.com-optimize.gif": {
+    "/bob-is-ded/1.2-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Bob is Ded Scene 1.2",
         "description": "Add description here",
         "collection": "bob is ded"
       }
     },
-    "/bob is ded/1.1-ezgif.com-optimize.gif": {
+    "/bob-is-ded/1.1-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Bob is Ded Scene 1.1",
         "description": "Add description here",
         "collection": "bob is ded"
       }
     },
-    "/bob is ded/3.3-ezgif.com-optimize.gif": {
+    "/bob-is-ded/3.3-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Bob is Ded Scene 3.3",
         "description": "Add description here",
         "collection": "bob is ded"
       }
     },
-    "/bob is ded/3.1-ezgif.com-optimize.gif": {
+    "/bob-is-ded/3.1-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Bob is Ded Scene 3.1",
         "description": "Add description here",
         "collection": "bob is ded"
       }
     },
-    "/bob is ded/2.3-ezgif.com-optimize.gif": {
+    "/bob-is-ded/2.3-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Bob is Ded Scene 2.3",
         "description": "Add description here",
         "collection": "bob is ded"
       }
     },
-    "/bob is ded/2.2-ezgif.com-optimize.gif": {
+    "/bob-is-ded/2.2-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Bob is Ded Scene 2.2",
         "description": "Add description here",
         "collection": "bob is ded"
       }
     },
-    "/bob is ded/2.1-ezgif.com-optimize.gif": {
+    "/bob-is-ded/2.1-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Bob is Ded Scene 2.1",
         "description": "Add description here",
@@ -464,7 +464,7 @@
         "collection": "burgers"
       }
     },
-    "/burgers/legendary thumbnail gif.gif": {
+    "/burgers/legendary thumbnail .gif": {
       "metadata": {
         "title": "Legendary Thumbnail",
         "description": "Add description here",
@@ -562,119 +562,119 @@
         "collection": "burgers"
       }
     },
-    "/fun guys/block2-ezgif.com-optimize.gif": {
+    "/fun-guys/block2-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Block Animation 2",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/common3-ezgif.com-optimize.gif": {
+    "/fun-guys/common3-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Common Animation 3",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/common2-ezgif.com-optimize.gif": {
+    "/fun-guys/common2-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Common Animation 2",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/common1-ezgif.com-optimize.gif": {
+    "/fun-guys/common1-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Common Animation 1",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/ghost-ezgif.com-optimize.gif": {
+    "/fun-guys/ghost-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Ghost Animation",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/Idle-ezgif.com-optimize.gif": {
+    "/fun-guys/Idle-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Idle Animation",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/hide2-ezgif.com-optimize.gif": {
+    "/fun-guys/hide2-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Hide Animation 2",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/Jump2-ezgif.com-optimize.gif": {
+    "/fun-guys/Jump2-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Jump Animation 2",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/jump2-ezgif.com-optimize (2).gif": {
+    "/fun-guys/jump2-ezgif.com-optimize (2).gif": {
       "metadata": {
         "title": "Jump Animation 2.2",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/jump2-ezgif.com-optimize (1).gif": {
+    "/fun-guys/jump2-ezgif.com-optimize (1).gif": {
       "metadata": {
         "title": "Jump Animation 2.1",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/Jump-ezgif.com-optimize.gif": {
+    "/fun-guys/Jump-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Jump Animation",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/legendary-ezgif.com-optimize (1).gif": {
+    "/fun-guys/legendary-ezgif.com-optimize (1).gif": {
       "metadata": {
         "title": "Legendary Animation",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/legendary_hide-ezgif.com-optimize.gif": {
+    "/fun-guys/legendary_hide-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Legendary Hide Animation",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/rare_run-ezgif.com-optimize.gif": {
+    "/fun-guys/rare_run-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Rare Run Animation",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/shocked2-ezgif.com-optimize.gif": {
+    "/fun-guys/shocked2-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Shocked Animation 2",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/run2-ezgif.com-optimize.gif": {
+    "/fun-guys/run2-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Run Animation 2",
         "description": "Add description here",
         "collection": "fun guys"
       }
     },
-    "/fun guys/rare-ezgif.com-optimize (2).gif": {
+    "/fun-guys/rare-ezgif.com-optimize (2).gif": {
       "metadata": {
         "title": "Rare Animation 2",
         "description": "Add description here",

@@ -17,18 +17,46 @@ export interface Collection {
   images: string[];
 }
 
+// Cache management
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+interface CacheEntry {
+  data: any;
+  timestamp: number;
+}
+
+const cache = new Map<string, CacheEntry>();
+
+const getFromCache = (key: string) => {
+  const entry = cache.get(key);
+  if (!entry) return null;
+  
+  if (Date.now() - entry.timestamp > CACHE_DURATION) {
+    cache.delete(key);
+    return null;
+  }
+  
+  return entry.data;
+};
+
+const setInCache = (key: string, data: any) => {
+  cache.set(key, {
+    data,
+    timestamp: Date.now()
+  });
+};
+
 // Atoms
 export const collectionsAtom = atom<Collection[]>([
   { 
     name: 'MACHINE GARDEN', 
-    path: 'machine garden', 
-    thumbnail: 'machine garden/thumbnail.mp4',
+    path: 'machine-garden', 
+    thumbnail: 'machine-garden/thumbnail.mp4',
     images: [] 
   },
   { 
     name: 'BOB IS DED', 
-    path: 'bob is ded', 
-    thumbnail: 'bob is ded/thumbnail.gif',
+    path: 'bob-is-ded', 
+    thumbnail: 'bob-is-ded/thumbnail.gif',
     images: [] 
   },
   { 
@@ -39,8 +67,8 @@ export const collectionsAtom = atom<Collection[]>([
   },
   { 
     name: 'FUN GUYS', 
-    path: 'fun guys', 
-    thumbnail: 'fun guys/thumbnail.gif',
+    path: 'fun-guys', 
+    thumbnail: 'fun-guys/thumbnail.gif',
     images: [] 
   },
   { 
@@ -49,12 +77,13 @@ export const collectionsAtom = atom<Collection[]>([
     thumbnail: 'genesis/thumbnail.png',
     images: [] 
   }
-
 ]);
 
 export const allImagesAtom = atom<MediaFile[]>([]);
-export const activeTabAtom = atom<string | null>(null);
+
 export const selectedImageAtom = atom<MediaFile | null>(null);
+
+export const activeTabAtom = atom<string | null>(null);
 
 // Derived atoms
 export const filteredImagesAtom = atom((get) => {
@@ -72,11 +101,11 @@ export const organizedImagesAtom = atom((get) => {
   const filteredImages = get(filteredImagesAtom);
 
   const collectionOrder = [
-    'machine garden',
-    'bob is ded',
+    'machine-garden',
+    'bob-is-ded',
     'burgers',
     'genesis',
-    'fun guys'
+    'fun-guys'
   ];
 
   return activeTab

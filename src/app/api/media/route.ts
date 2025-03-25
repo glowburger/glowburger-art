@@ -1,37 +1,48 @@
 import { NextResponse } from "next/server";
-import { readdirSync, readFileSync, statSync } from "fs";
+import { readFileSync } from "fs";
 import { join } from "path";
 
-const scanDirectory = (dir: string, baseDir: string): string[] => {
-  return readdirSync(dir).flatMap(file => {
-    const fullPath = join(dir, file);
-    if (statSync(fullPath).isDirectory()) {
-      return scanDirectory(fullPath, baseDir);
-    }
-    return fullPath
-      .replace(baseDir, '')
-      .replace(/\\/g, '/')
-      .replace(/\/+/g, '/');
-  });
+interface FileMetadata {
+  metadata: {
+    title: string;
+    description: string;
+    collection: string;
+  };
+}
+
+interface MetadataFile {
+  version: string;
+  lastUpdated: string;
+  files: Record<string, FileMetadata>;
+}
+
+// Helper to read metadata file
+const getMetadata = (): MetadataFile => {
+  const metadataPath = join(process.cwd(), 'src/app/data/artwork_metadata.json');
+  const rawData = readFileSync(metadataPath, 'utf-8');
+  return JSON.parse(rawData);
 };
 
 export async function GET() {
   try {
-    const publicDir = join(process.cwd(), 'public');
-    const metadataPath = join(process.cwd(), 'src/app/data/artwork_metadata.json');
+    const { files } = getMetadata();
     
-    const files = scanDirectory(publicDir, publicDir)
-      .filter(path => ['.mp4', '.gif', '.png', '.jpg', '.jpeg', '.webm']
-        .some(ext => path.endsWith(ext)));
-
-    const metadata = JSON.parse(readFileSync(metadataPath, 'utf-8'));
-    
-    const responseData = files.map(filePath => ({
-      path: filePath,
-      metadata: metadata.files[filePath]?.metadata || null
+    // Transform the metadata into our expected format
+    const responseData = Object.entries(files).map(([path, data]) => ({
+      path: path,
+      metadata: data.metadata,
+      modifiedTime: Date.now()
     }));
 
-    return NextResponse.json(responseData);
+    // Add CORS headers
+    const response = NextResponse.json(responseData);
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+    response.headers.set('Cross-Origin-Resource-Policy', 'cross-origin');
+    response.headers.set('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+    
+    return response;
   } catch (error) {
     console.error('API Error:', error);
     return NextResponse.json(
@@ -39,4 +50,15 @@ export async function GET() {
       { status: 500 }
     );
   }
+}
+
+// Handle OPTIONS requests for CORS
+export async function OPTIONS() {
+  const response = new NextResponse(null, { status: 204 });
+  response.headers.set('Access-Control-Allow-Origin', '*');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+  response.headers.set('Cross-Origin-Resource-Policy', 'cross-origin');
+  response.headers.set('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  return response;
 } 

@@ -10,6 +10,8 @@ interface ChatMessage {
   timestamp: Date;
 }
 
+const API_BASE_URL = 'https://api.glowburger.art/api/media';
+
 const ChatPage = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState('');
@@ -177,7 +179,7 @@ const ChatPage = () => {
           <div className="absolute inset-0 flex items-center justify-center p-4">
             <div className="relative w-full h-full border border-[#4A4A4A]/20 bg-white/50 rounded-lg overflow-hidden">
               <video
-                src="/machine garden/computer.mp4"
+                src={`${API_BASE_URL}/machine-garden/computer.mp4`}
                 className="w-full h-full object-cover filter drop-shadow-[0_0_15px_rgba(74,74,74,0.3)]"
                 autoPlay
                 loop
