@@ -19,31 +19,44 @@ export interface Collection {
 
 // Cache management
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
-interface CacheEntry {
-  data: any;
+
+interface CacheEntry<T> {
+  data: T;
   timestamp: number;
 }
 
-const cache = new Map<string, CacheEntry>();
+interface CacheManager<T> {
+  get: (key: string) => T | null;
+  set: (key: string, data: T) => void;
+}
 
-const getFromCache = (key: string) => {
-  const entry = cache.get(key);
-  if (!entry) return null;
-  
-  if (Date.now() - entry.timestamp > CACHE_DURATION) {
-    cache.delete(key);
-    return null;
-  }
-  
-  return entry.data;
+const createCache = <T>(): CacheManager<T> => {
+  const cache = new Map<string, CacheEntry<T>>();
+
+  return {
+    get: (key: string): T | null => {
+      const entry = cache.get(key);
+      if (!entry) return null;
+      
+      if (Date.now() - entry.timestamp > CACHE_DURATION) {
+        cache.delete(key);
+        return null;
+      }
+      
+      return entry.data;
+    },
+    
+    set: (key: string, data: T): void => {
+      cache.set(key, {
+        data,
+        timestamp: Date.now()
+      });
+    }
+  };
 };
 
-const setInCache = (key: string, data: any) => {
-  cache.set(key, {
-    data,
-    timestamp: Date.now()
-  });
-};
+// Create typed cache instance for MediaFile arrays
+const mediaCache = createCache<MediaFile[]>();
 
 // Atoms
 export const collectionsAtom = atom<Collection[]>([
@@ -85,14 +98,21 @@ export const selectedImageAtom = atom<MediaFile | null>(null);
 
 export const activeTabAtom = atom<string | null>(null);
 
-// Derived atoms
+// Derived atoms with caching
 export const filteredImagesAtom = atom((get) => {
   const activeTab = get(activeTabAtom);
   const allImages = get(allImagesAtom);
   
-  return activeTab
+  const cacheKey = `filtered-${activeTab || 'all'}`;
+  const cached = mediaCache.get(cacheKey);
+  if (cached) return cached;
+  
+  const filtered = activeTab
     ? allImages.filter(file => file.path.startsWith(`/${activeTab}/`))
     : allImages;
+  
+  mediaCache.set(cacheKey, filtered);
+  return filtered;
 });
 
 export const organizedImagesAtom = atom((get) => {
