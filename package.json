@@ -9,20 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "jotai": "^2.12.2",
     "next": "15.2.1",
-    "openai": "^4.87.3",
+    "openai": "^4.89.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
+    "@eslint/eslintrc": "^3.3.1",
+    "@tailwindcss/postcss": "^4.0.15",
+    "@types/node": "^20.17.27",
+    "@types/react": "^19.0.12",
+    "@types/react-dom": "^19.0.4",
+    "eslint": "^9.23.0",
     "eslint-config-next": "15.2.1",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "tailwindcss": "^4.0.15",
+    "typescript": "^5.8.2"
   }
 }

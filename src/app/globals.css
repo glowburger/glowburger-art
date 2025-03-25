@@ -2,7 +2,6 @@
 
 * {
   font-family: var(--font-ibm-plex-mono);
-  text-shadow: 0 0 5px rgba(147, 51, 234, 0.5);
 }
 
 :root {
@@ -18,8 +17,8 @@
 }
 
 body {
-  background: #000 !important;
-  color: #8b5cf6 !important;
+  background: #fff !important;
+  color: #4A4A4A !important;
   overflow: hidden !important;
 }
 
@@ -396,4 +395,34 @@ body::after {
 
 .next-image-wrapper > img {
   object-fit: contain !important;
+}
+
+@keyframes slide-in-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
