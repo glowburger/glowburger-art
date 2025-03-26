@@ -1,7 +1,7 @@
 "use client";
 
 import { useAtom } from 'jotai';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from 'next/image';
 import {
   collectionsAtom,
@@ -300,6 +300,9 @@ const HomePage = () => {
   const [organizedImages] = useAtom(organizedImagesAtom);
   const [isMarketplaceOpen, setIsMarketplaceOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
+  const dragStartY = useRef(0);
 
   useEffect(() => {
     const fetchCollectionImages = async () => {
@@ -361,6 +364,38 @@ const HomePage = () => {
       const nextIndex = currentIndex < currentImages.length - 1 ? currentIndex + 1 : 0;
       setSelectedImage(currentImages[nextIndex]);
     }
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    dragStartY.current = e.touches[0].clientY;
+    setIsDragging(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    
+    const currentY = e.touches[0].clientY;
+    const diff = currentY - dragStartY.current;
+    
+    // Only allow dragging downwards
+    if (diff < 0) {
+      setDragOffset(0);
+      return;
+    }
+    
+    setDragOffset(diff);
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    
+    // If dragged more than 150px down, close the drawer
+    if (dragOffset > 150) {
+      handleCloseDrawer();
+    }
+    
+    // Reset the offset
+    setDragOffset(0);
   };
 
   return (
@@ -581,26 +616,27 @@ const HomePage = () => {
       {/* Image Details Drawer */}
       {selectedImage && (
         <>
-          {/* Overlay with fade animation - already handles click outside */}
+          {/* Overlay */}
           <div 
-            className="fixed inset-0 bg-white/80 z-40 animate-fade-in cursor-pointer"
+            className="fixed inset-0 bg-white/80 z-[60] animate-fade-in cursor-pointer"
             onClick={handleCloseDrawer}
             aria-label="Close drawer"
             role="button"
             tabIndex={0}
           />
           
-          {/* Drawer - prevent click propagation to overlay */}
+          {/* Drawer */}
           <div 
             className={`
-              fixed bg-white z-50 border-[#4A4A4A]/20
+              fixed bg-white z-[70] border-[#4A4A4A]/20
               overflow-y-auto
+              touch-pan-y
               
               /* Mobile styles */
               bottom-0 left-0 right-0
               h-[80vh]
               border-t
-              rounded-t-xl
+              rounded-t-lg
               
               /* Desktop styles */
               md:bottom-auto md:left-auto
@@ -613,13 +649,26 @@ const HomePage = () => {
               /* Animation */
               transform
               transition-all
-              duration-300
-              ease-out
+              ${isDragging ? 'transition-none' : 'duration-300 ease-out'}
               animate-slide-in-up
               md:animate-slide-in-right
             `}
+            style={{
+              transform: `
+                translateY(${dragOffset}px)
+                ${isDragging ? `scale(${1 - dragOffset / 1000})` : ''}
+              `
+            }}
             onClick={(e) => e.stopPropagation()}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
+            {/* Drag Handle - Make it more prominent */}
+            <div className="md:hidden w-full flex justify-center pt-3 pb-1 cursor-grab active:cursor-grabbing">
+              <div className="w-12 h-1 rounded-full bg-[#4A4A4A]/20" />
+            </div>
+
             {/* Navigation Arrows */}
             <div className="hidden md:flex justify-between items-center px-6 py-4 border-b border-[#4A4A4A]/20">
               <button
