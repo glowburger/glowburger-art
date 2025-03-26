@@ -10,7 +10,110 @@ interface ChatMessage {
   timestamp: Date;
 }
 
+// Add these new interfaces at the top with your other interfaces
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
 const API_BASE_URL = 'https://api.glowburger.art/api/media';
+
+// Add this new Modal component
+const InfoModal = ({ isOpen, onClose }: ModalProps) => {
+  if (!isOpen) return null;
+
+  return (
+    <>
+      {/* Scrim overlay */}
+      <div 
+        className="fixed inset-0 bg-[#4A4A4A]/50 backdrop-blur-sm z-50 animate-fade-in"
+        onClick={onClose}
+      />
+      
+      {/* Modal - Desktop centered, Mobile bottom drawer */}
+      <div 
+        className="
+          fixed 
+          z-50
+          
+          /* Mobile styles - bottom drawer */
+          bottom-0
+          left-0
+          right-0
+          max-h-[80vh]
+          rounded-t-lg
+          animate-slide-up
+          
+          /* Desktop styles - centered modal */
+          md:bottom-auto
+          md:left-1/2
+          md:top-1/2
+          md:-translate-x-1/2
+          md:-translate-y-1/2
+          md:w-[90vw]
+          md:max-w-lg
+          md:rounded-sm
+          md:animate-scale-in
+
+          /* Shared styles */
+          bg-white
+          border
+          border-[#4A4A4A]/20
+          overflow-y-auto
+        "
+      >
+        {/* Pull indicator for mobile */}
+        <div className="md:hidden w-full flex justify-center pt-3 pb-1">
+          <div className="w-10 h-1 rounded-full bg-[#4A4A4A]/20" />
+        </div>
+
+        {/* Content container */}
+        <div className="p-6">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-mono text-lg text-[#4A4A4A]">ABOUT GLOWPT4</h2>
+            <button 
+              onClick={onClose}
+              className="
+                text-[#4A4A4A]/70 
+                hover:text-[#4A4A4A] 
+                transition-colors
+                cursor-pointer
+              "
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Content */}
+          <div className="space-y-4 font-mono text-sm text-[#4A4A4A]/70">
+            <p>
+            In March 2025, I unearthed over 400 blog entries written by my younger self from 2008 to 2010: an
+accidental linguistic time capsule from Singapore’s early internet era.
+
+            </p>
+            <p>
+              These entries, composed in Singlish (a creole blending English, Hokkien, and Malay), exemplify the raw,
+              unfiltered voice of my pre-adolescence.
+            </p>
+            <p>
+              GLOW&apos;S PERSONAL TIMECAPSULE 4 allows you to interact with a version of my younger self, 
+              exploring the multitudes of inner worlds from this period of my life.
+            </p>
+            <div className="pt-4 border-t border-[#4A4A4A]/20">
+              <p className="text-xs">
+                Note: This is an artistic experiment and the responses should be taken as 
+                creative interpretations rather than factual statements.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
 
 const ChatPage = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -22,6 +125,7 @@ const ChatPage = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
 
   // Scroll to bottom whenever messages change
   const scrollToBottom = () => {
@@ -118,9 +222,16 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="flex h-screen bg-white">
+    <div className="flex flex-col md:flex-row h-screen bg-white">
       {/* Left Container - Image */}
-      <div className="w-1/2 h-full flex items-center justify-center border-r border-[#4A4A4A]/20 bg-white/95">
+      <div className="
+        h-[33vh] md:h-full 
+        md:w-1/2 
+        relative 
+        border-b md:border-b-0 md:border-r 
+        border-[#4A4A4A]/20 
+        bg-white/95
+      ">
         {/* Back Button */}
         <Link
           href="/"
@@ -194,7 +305,14 @@ const ChatPage = () => {
       </div>
 
       {/* Right Container - Chat */}
-      <div className="w-1/2 h-screen bg-white flex flex-col">
+      <div className="
+        flex-1 
+        h-[67vh] md:h-screen 
+        md:w-1/2 
+        bg-white 
+        flex 
+        flex-col
+      ">
         {/* Chat Messages Area */}
         <div className="flex-1 overflow-y-auto relative">
           {/* Sticky Connection Header */}
@@ -220,7 +338,32 @@ const ChatPage = () => {
                   <span className="font-mono text-[#4A4A4A]/70 text-sm">CONNECTION ESTABLISHED</span>
                 </div>
                 <div className="px-3 py-1 bg-[#4A4A4A]/5 border border-[#4A4A4A]/20 rounded-sm font-mono text-xs text-[#4A4A4A]/70">
-                  GLOW&apos;S PERSONAL TIMECAPSULE 4
+                  <div className="flex items-center gap-2 cursor-pointer group" onClick={() => setIsInfoModalOpen(true)}>
+                    <span>GLOWPT4</span>
+                    <button
+                      className="
+                        text-[#4A4A4A]/50 
+                        group-hover:text-[#4A4A4A]/70 
+                        transition-colors
+                        focus:outline-none
+                        cursor-pointer
+                      "
+                    >
+                      <svg 
+                        className="w-4 h-4" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                      >
+                        <path 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          strokeWidth={2} 
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -275,11 +418,24 @@ const ChatPage = () => {
                 <button
                   key={index}
                   onClick={() => handleSuggestionClick(suggestion)}
-                  className="px-4 py-2 bg-[#4A4A4A]/5 border border-[#4A4A4A]/20 
-                    rounded-sm font-mono text-xs text-[#4A4A4A]/70 
-                    hover:bg-[#4A4A4A]/10 hover:border-[#4A4A4A]/40 
-                    transition-colors cursor-pointer
-                    text-center whitespace-nowrap"
+                  className="
+                    w-full md:w-auto
+                    px-4 
+                    py-2 
+                    bg-[#4A4A4A]/5 
+                    border 
+                    border-[#4A4A4A]/20 
+                    rounded-sm 
+                    font-mono 
+                    text-xs 
+                    text-[#4A4A4A]/70 
+                    hover:bg-[#4A4A4A]/10 
+                    hover:border-[#4A4A4A]/40 
+                    transition-colors 
+                    cursor-pointer
+                    text-center 
+                    whitespace-normal md:whitespace-nowrap
+                  "
                   style={{
                     animationDelay: `${index * 150}ms`,
                     animationFillMode: 'forwards'
@@ -311,9 +467,23 @@ const ChatPage = () => {
                 }
               }}
               placeholder="Enter your message..."
-              className="flex-1 bg-[#4A4A4A]/5 border border-[#4A4A4A]/20 rounded-sm px-4 py-2 
-                text-[#4A4A4A] font-mono focus:outline-none focus:border-[#4A4A4A]/40 
-                placeholder-[#4A4A4A]/30 resize-none min-h-[40px] max-h-[160px]"
+              className="
+                flex-1 
+                bg-[#4A4A4A]/5 
+                border 
+                border-[#4A4A4A]/20 
+                rounded-sm 
+                px-4 
+                py-2 
+                text-[#4A4A4A] 
+                font-mono 
+                focus:outline-none 
+                focus:border-[#4A4A4A]/40 
+                placeholder-[#4A4A4A]/30 
+                resize-none 
+                min-h-[40px] 
+                max-h-[80px] md:max-h-[160px]
+              "
               disabled={isLoading}
               rows={1}
             />
@@ -324,17 +494,30 @@ const ChatPage = () => {
                 }
               }}
               disabled={isLoading || !inputMessage.trim()}
-              className={`px-4 py-2 rounded-sm font-mono text-sm transition-colors ${
-                isLoading || !inputMessage.trim()
+              className={`
+                px-4 
+                py-2 
+                rounded-sm 
+                font-mono 
+                text-sm 
+                transition-colors
+                ${isLoading || !inputMessage.trim()
                   ? 'bg-[#4A4A4A]/20 text-[#4A4A4A]/50 cursor-not-allowed'
                   : 'bg-[#4A4A4A] text-white hover:bg-[#4A4A4A]/80 cursor-pointer'
-              }`}
+                }
+              `}
             >
               {isLoading ? 'SENDING...' : 'SEND'}
             </button>
           </div>
         </div>
       </div>
+
+      {/* Add the modal */}
+      <InfoModal 
+        isOpen={isInfoModalOpen}
+        onClose={() => setIsInfoModalOpen(false)}
+      />
     </div>
   );
 };
