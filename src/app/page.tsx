@@ -19,6 +19,25 @@ const formatPathForApi = (folder: string, filename: string) => {
   return `${API_BASE_URL}/${formattedFolder}/${encodeURIComponent(filename)}`;
 };
 
+// Replace the existing MediaLoader with this new skeleton loader
+const MediaLoader = () => (
+  <div className="absolute inset-0 bg-white overflow-hidden">
+    <div className="w-full h-full relative">
+      {/* Base skeleton */}
+      <div className="absolute inset-0 bg-[#4A4A4A]/5" />
+      
+      {/* Animated shine effect */}
+      <div 
+        className="absolute inset-0 animate-shine"
+        style={{
+          background: 'linear-gradient(90deg, transparent 0%, rgba(74, 74, 74, 0.05) 50%, transparent 100%)',
+          backgroundSize: '200% 100%'
+        }}
+      />
+    </div>
+  </div>
+);
+
 // MediaDisplay component with proper typing
 const MediaDisplay = ({ src, className }: { src: string; className?: string }) => {
   const cleanSrc = src.startsWith('/') ? src.slice(1) : src;
@@ -29,6 +48,9 @@ const MediaDisplay = ({ src, className }: { src: string; className?: string }) =
   const isVideo = ['.mp4', '.webm'].some(ext => filename.toLowerCase().endsWith(ext));
   const isGif = filename.toLowerCase().endsWith('.gif');
   
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  
   const baseStyles = `
     transition-[filter] duration-200 ease-in-out
     [filter:grayscale(100%)_brightness(1.0)_sepia(0.2)_saturate(0.1)]
@@ -37,11 +59,10 @@ const MediaDisplay = ({ src, className }: { src: string; className?: string }) =
     ${className || ''}
   `;
 
-  const [error, setError] = useState(false);
-  
   if (isVideo) {
     return (
       <div className={`relative w-full overflow-hidden ${baseStyles}`}>
+        {loading && <MediaLoader />}
         <video 
           src={apiUrl}
           className="w-full h-auto"
@@ -50,67 +71,11 @@ const MediaDisplay = ({ src, className }: { src: string; className?: string }) =
           loop
           playsInline
           crossOrigin="anonymous"
-          onError={() => setError(true)}
-        />
-        {error && (
-          <div className="absolute inset-0 flex items-center justify-center bg-[#4A4A4A]/10">
-            <span className="font-mono text-sm text-[#4A4A4A]/60">Failed to load media</span>
-          </div>
-        )}
-      </div>
-    );
-  }
-  
-  if (isGif || !isVideo) {
-    return (
-      <div className="relative w-full overflow-hidden">
-        <Image
-          src={apiUrl}
-          alt="Artwork preview"
-          width={1200}
-          height={800}
-          className={`${baseStyles} w-full h-auto`}
-          quality={80}
-          loading="lazy"
-          unoptimized={isGif}
-          crossOrigin="anonymous"
-          onError={() => setError(true)}
-        />
-        {error && (
-          <div className="absolute inset-0 flex items-center justify-center bg-[#4A4A4A]/10">
-            <span className="font-mono text-sm text-[#4A4A4A]/60">Failed to load media</span>
-          </div>
-        )}
-      </div>
-    );
-  }
-};
-
-// Add this new component for raw media display
-const MediaDisplayRaw = ({ src }: { src: string }) => {
-  const cleanSrc = src.startsWith('/') ? src.slice(1) : src;
-  const [folder, ...filenameParts] = cleanSrc.split('/');
-  const filename = filenameParts.join('/');
-  const apiUrl = formatPathForApi(folder, filename);
-  
-  const isVideo = ['.mp4', '.webm'].some(ext => filename.toLowerCase().endsWith(ext));
-  const isGif = filename.toLowerCase().endsWith('.gif');
-  
-  const [error, setError] = useState(false);
-
-  if (isVideo) {
-    return (
-      <div className="relative w-full overflow-hidden">
-        <video 
-          src={apiUrl}
-          className="w-full h-auto"
-          autoPlay
-          muted
-          loop
-          playsInline
-          controls
-          crossOrigin="anonymous"
-          onError={() => setError(true)}
+          onLoadedData={() => setLoading(false)}
+          onError={() => {
+            setError(true);
+            setLoading(false);
+          }}
         />
         {error && (
           <div className="absolute inset-0 flex items-center justify-center bg-[#4A4A4A]/10">
@@ -123,17 +88,22 @@ const MediaDisplayRaw = ({ src }: { src: string }) => {
   
   return (
     <div className="relative w-full overflow-hidden">
+      {loading && <MediaLoader />}
       <Image
         src={apiUrl}
         alt="Artwork preview"
-        width={2400}
-        height={1600}
-        className="w-full h-auto"
-        quality={100}
-        priority
+        width={1200}
+        height={800}
+        className={`${baseStyles} w-full h-auto`}
+        quality={80}
+        loading="lazy"
         unoptimized={isGif}
         crossOrigin="anonymous"
-        onError={() => setError(true)}
+        onLoadingComplete={() => setLoading(false)}
+        onError={() => {
+          setError(true);
+          setLoading(false);
+        }}
       />
       {error && (
         <div className="absolute inset-0 flex items-center justify-center bg-[#4A4A4A]/10">
@@ -144,6 +114,158 @@ const MediaDisplayRaw = ({ src }: { src: string }) => {
   );
 };
 
+// Add this new component for raw media display
+const MediaDisplayRaw = ({ src }: { src: string }) => {
+  const cleanSrc = src.startsWith('/') ? src.slice(1) : src;
+  const [folder, ...filenameParts] = cleanSrc.split('/');
+  const filename = filenameParts.join('/');
+  const apiUrl = formatPathForApi(folder, filename);
+  
+  const isVideo = ['.mp4', '.webm'].some(ext => filename.toLowerCase().endsWith(ext));
+  const isGif = filename.toLowerCase().endsWith('.gif');
+  
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  if (isVideo) {
+    return (
+      <div className="relative w-full overflow-hidden">
+        {loading && <MediaLoader />}
+        <video 
+          src={apiUrl}
+          className="w-full h-auto"
+          autoPlay
+          muted
+          loop
+          playsInline
+          controls
+          crossOrigin="anonymous"
+          onLoadedData={() => setLoading(false)}
+          onError={() => {
+            setError(true);
+            setLoading(false);
+          }}
+        />
+        {error && (
+          <div className="absolute inset-0 flex items-center justify-center bg-[#4A4A4A]/10">
+            <span className="font-mono text-sm text-[#4A4A4A]/60">Failed to load media</span>
+          </div>
+        )}
+      </div>
+    );
+  }
+  
+  return (
+    <div className="relative w-full overflow-hidden">
+      {loading && <MediaLoader />}
+      <Image
+        src={apiUrl}
+        alt="Artwork preview"
+        width={2400}
+        height={1600}
+        className="w-full h-auto"
+        quality={100}
+        priority
+        unoptimized={isGif}
+        crossOrigin="anonymous"
+        onLoadingComplete={() => setLoading(false)}
+        onError={() => {
+          setError(true);
+          setLoading(false);
+        }}
+      />
+      {error && (
+        <div className="absolute inset-0 flex items-center justify-center bg-[#4A4A4A]/10">
+          <span className="font-mono text-sm text-[#4A4A4A]/60">Failed to load media</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Add this new component for the mobile menu drawer
+const MobileMenuDrawer = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => (
+  <>
+    {isOpen && (
+      <div 
+        className="fixed inset-0 bg-white/80 z-40 animate-fade-in"
+        onClick={onClose}
+      />
+    )}
+    <div className={`
+      fixed top-0 right-0 h-full w-64 bg-white z-50
+      border-l border-[#4A4A4A]/20 transform transition-transform duration-300
+      ${isOpen ? 'translate-x-0' : 'translate-x-full'}
+    `}>
+      <div className="p-6 space-y-6">
+        <div className="flex justify-between items-center">
+          <h3 className="font-mono text-sm text-[#4A4A4A]/60">MENU</h3>
+          <button 
+            onClick={onClose}
+            className="text-[#4A4A4A] hover:text-[#4A4A4A]/80"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <h4 className="font-mono text-xs text-[#4A4A4A]/60">SOCIAL</h4>
+            <div className="space-y-2">
+              <a 
+                href="https://x.com/glowburger"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-[#4A4A4A] hover:text-[#4A4A4A]/80 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+                <span className="font-mono text-sm">Twitter</span>
+              </a>
+              <a 
+                href="https://instagram.com/glowburger_"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-[#4A4A4A] hover:text-[#4A4A4A]/80 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+                <span className="font-mono text-sm">Instagram</span>
+              </a>
+            </div>
+          </div>
+          
+          <div className="space-y-2">
+            <h4 className="font-mono text-xs text-[#4A4A4A]/60">MARKETPLACES</h4>
+            <div className="space-y-2">
+              <a 
+                href="https://d.rip/glowburger"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block font-mono text-sm text-[#4A4A4A] hover:text-[#4A4A4A]/80 transition-colors"
+              >
+                drip.haus
+              </a>
+              <a 
+                href="https://www.mallow.art/u/glowburger"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block font-mono text-sm text-[#4A4A4A] hover:text-[#4A4A4A]/80 transition-colors"
+              >
+                mallow.art
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </>
+);
+
 const HomePage = () => {
   const [collections, setCollections] = useAtom(collectionsAtom);
   const [, setAllImages] = useAtom(allImagesAtom);
@@ -151,6 +273,7 @@ const HomePage = () => {
   const [selectedImage, setSelectedImage] = useAtom(selectedImageAtom);
   const [organizedImages] = useAtom(organizedImagesAtom);
   const [isMarketplaceOpen, setIsMarketplaceOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchCollectionImages = async () => {
@@ -216,62 +339,82 @@ const HomePage = () => {
 
   return (
     <div className="h-screen overflow-y-auto bg-white">
+      {/* Chat Banner */}
+      <div className="relative bg-gradient-to-r from-[#FF69B4]/5 via-[#7333BD]/5 to-[#FF69B4]/5 border-b border-[#4A4A4A]/20">
+        <div className="max-w-screen-xl mx-auto px-6 py-3">
+          <a 
+            href="/chat"
+            className="
+              flex items-center justify-center gap-2
+              font-mono text-sm
+              transition-all duration-300 ease-out
+              group
+              hover:scale-[1.02]
+              relative
+            "
+          >
+            <span 
+              className="
+                relative
+                bg-gradient-to-r from-[#FF69B4] via-[#7333BD] to-[#FF69B4]
+                bg-[length:300%_100%]
+                animate-gradient-flow-lr
+                bg-clip-text
+                text-transparent
+                animate-bounce-slow
+                group-hover:animate-gradient-flow-lr-fast
+                after:absolute after:inset-0 after:z-[-1]
+                after:opacity-0 after:transition-opacity after:duration-300
+                after:rounded-lg
+                group-hover:after:opacity-100
+              "
+            >
+              chat with my inner child
+            </span>
+            <span 
+              className="
+                font-mono 
+                animate-bounce-slow 
+                text-[#4A4A4A]
+                transition-transform duration-300
+                group-hover:translate-x-1
+              "
+            >
+              {'>>>'}
+            </span>
+          </a>
+        </div>
+        
+        {/* Animated background gradient */}
+        <div 
+          className="
+            absolute inset-0 -z-10
+            bg-gradient-to-r from-[#FF69B4]/5 via-[#7333BD]/5 to-[#FF69B4]/5
+            bg-[length:200%_100%]
+            animate-gradient-flow-lr-slow
+            pointer-events-none
+          "
+        />
+      </div>
+
       {/* Header Section */}
       <header className="sticky top-0 z-50 bg-white border-b border-[#4A4A4A]/20">
         <div className="max-w-screen-xl mx-auto p-6">
           <div className="flex items-center justify-between">
-            {/* Artist Name, Description and Chat Button */}
+            {/* Artist Name and Description */}
             <div>
               <div className="flex items-center gap-4">
                 <h1 className="font-mono text-2xl font-bold text-[#4A4A4A]">
                   GLOWBURGER
                 </h1>
-                <div className="flex items-center gap-4">
-                  <p className="font-mono text-sm text-[#4A4A4A]/70">
-                    artist from singapore, currently working on
-                  </p>
-                  
-                  {/* Chat Button */}
-                  <a 
-                    href="/chat"
-                    className="
-                      relative
-                      font-mono 
-                      text-sm 
-                      text-[#4A4A4A]
-                      px-4 
-                      py-1.5
-                      bg-white
-                      border 
-                      border-[#4A4A4A]/20
-                      rounded-2xl
-                      transition-all
-                      duration-300
-                      ease-out
-                      overflow-visible
-                      glitch-button
-                      hover:border-[#4A4A4A]/40
-                      hover:bg-white/90
-                      group
-                    "
-                  >
-                    <span className="
-                      relative 
-                      z-10 
-                      gradient-text
-                      transition-all
-                      duration-300
-                      group-hover:scale-105
-                    ">
-                      chat with my inner child {'>>>'} 
-                    </span>
-                  </a>
-                </div>
+                <p className="hidden md:block font-mono text-sm text-[#4A4A4A]/70">
+                  artist from singapore
+                </p>
               </div>
             </div>
 
-            {/* Social Links */}
-            <div className="flex items-center gap-4">
+            {/* Social Links and Menu - Desktop */}
+            <div className="hidden md:flex items-center gap-4">
               {/* X (Twitter) */}
               <a 
                 href="https://x.com/glowburger" 
@@ -332,6 +475,16 @@ const HomePage = () => {
                 </div>
               </div>
             </div>
+
+            {/* Mobile Menu Button */}
+            <button 
+              className="md:hidden text-[#4A4A4A] hover:text-[#4A4A4A]/80"
+              onClick={() => setIsMobileMenuOpen(true)}
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -370,6 +523,12 @@ const HomePage = () => {
           </div>
         </div>
       </header>
+
+      {/* Mobile Menu Drawer */}
+      <MobileMenuDrawer 
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+      />
 
       {/* Content Section */}
       <div className="p-6">

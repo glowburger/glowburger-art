@@ -62,14 +62,14 @@ const mediaCache = createCache<MediaFile[]>();
 export const collectionsAtom = atom<Collection[]>([
   { 
     name: 'MACHINE GARDEN', 
-    path: 'machine-garden', 
-    thumbnail: 'machine-garden/thumbnail.mp4',
+    path: 'machine garden',
+    thumbnail: 'machine garden/thumbnail.mp4',
     images: [] 
   },
   { 
     name: 'BOB IS DED', 
-    path: 'bob-is-ded', 
-    thumbnail: 'bob-is-ded/thumbnail.gif',
+    path: 'bob is ded',
+    thumbnail: 'bob is ded/thumbnail.gif',
     images: [] 
   },
   { 
@@ -80,8 +80,8 @@ export const collectionsAtom = atom<Collection[]>([
   },
   { 
     name: 'FUN GUYS', 
-    path: 'fun-guys', 
-    thumbnail: 'fun-guys/thumbnail.gif',
+    path: 'fun guys',
+    thumbnail: 'fun guys/thumbnail.gif',
     images: [] 
   },
   { 
@@ -121,11 +121,11 @@ export const organizedImagesAtom = atom((get) => {
   const filteredImages = get(filteredImagesAtom);
 
   const collectionOrder = [
-    'machine-garden',
-    'bob-is-ded',
+    'machine garden',
+    'bob is ded',
     'burgers',
     'genesis',
-    'fun-guys'
+    'fun guys'
   ];
 
   return activeTab

@@ -30,13 +30,6 @@
         "collection": "bob is ded"
       }
     },
-    "/bob is ded/bob is ded_scene 3.2.gif": {
-      "metadata": {
-        "title": "Bob is Ded Scene 3.2",
-        "description": "Add description here",
-        "collection": "bob is ded"
-      }
-    },
     "/burgers/thumbnail.gif": {
       "metadata": {
         "title": "Burgers Thumbnail",
@@ -408,13 +401,6 @@
         "collection": "bob is ded"
       }
     },
-    "/bob is ded/1.1-ezgif.com-optimize.gif": {
-      "metadata": {
-        "title": "Bob is Ded Scene 1.1",
-        "description": "Add description here",
-        "collection": "bob is ded"
-      }
-    },
     "/bob is ded/3.3-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Bob is Ded Scene 3.3",
@@ -453,13 +439,6 @@
     "/burgers/leg-ezgif.com-optimize.gif": {
       "metadata": {
         "title": "Legendary Animation",
-        "description": "Add description here",
-        "collection": "burgers"
-      }
-    },
-    "/burgers/legendary thumbnail.gif": {
-      "metadata": {
-        "title": "Legendary Thumbnail",
         "description": "Add description here",
         "collection": "burgers"
       }

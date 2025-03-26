@@ -118,6 +118,116 @@ html {
   .object-scale-down {
     object-fit: scale-down;
   }
+
+  @keyframes shine {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  .animate-shine {
+    animation: shine 2s ease-in-out infinite;
+  }
+
+  @keyframes slide-in-right {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .animate-slide-in-right {
+    animation: slide-in-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.2s ease-out;
+  }
+
+  @keyframes gradient-flow {
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
+  }
+
+  @keyframes bounce-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+
+  .animate-gradient-flow {
+    animation: gradient-flow 4s ease infinite;
+  }
+
+  .animate-gradient-flow-fast {
+    animation: gradient-flow 2s ease infinite;
+  }
+
+  .animate-bounce-slow {
+    animation: bounce-slow 2s ease-in-out infinite;
+  }
+
+  @keyframes gradient-flow-lr {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 300% 50%;
+    }
+  }
+
+  .animate-gradient-flow-lr {
+    animation: gradient-flow-lr 6s linear infinite;
+  }
+
+  .animate-gradient-flow-lr-fast {
+    animation: gradient-flow-lr 3s linear infinite;
+  }
+
+  @keyframes gradient-flow-lr-hover {
+    0% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 400% 50%;
+    }
+  }
+
+  .animate-gradient-flow-lr-fast {
+    animation: gradient-flow-lr-hover 2s linear infinite;
+  }
+
+  .animate-bounce-slow {
+    animation: bounce-slow 2s ease-in-out infinite;
+  }
+
+  /* Update bounce animation for hover state */
+  @keyframes bounce-hover {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-3px) translateX(2px); }
+  }
+
+  .group:hover .animate-bounce-slow {
+    animation: bounce-hover 1.5s ease-in-out infinite;
+  }
+
+  .animate-gradient-flow-lr-slow {
+    animation: gradient-flow-lr 12s linear infinite;
+  }
 }
 
 @keyframes fade-in-up {
@@ -180,17 +290,6 @@ html {
 .before\:clip-path-bubble-arrow-right::before {
   background: rgba(255,255,255,0.9) !important;
   border: 1px solid rgba(0,0,0,0.1) !important;
-}
-
-@keyframes slide-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
 }
 
 @keyframes slide-in-left {
@@ -260,20 +359,12 @@ html {
   to { width: 100% }
 }
 
-@keyframes fade-in {
-  to { opacity: 1 }
-}
-
 @keyframes blink {
   50% { opacity: 0 }
 }
 
 .animate-typewriter {
   animation: typewriter 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-.animate-fade-in {
-  animation: fade-in 0.1s forwards;
 }
 
 .animate-blink {
