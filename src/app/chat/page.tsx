@@ -16,7 +16,7 @@ interface ModalProps {
   onClose: () => void;
 }
 
-const API_BASE_URL = 'https://api.glowburger.art/api/media';
+const API_BASE_URL = 'https://glowburger.b-cdn.net/';
 
 // Add this new Modal component
 const InfoModal = ({ isOpen, onClose }: ModalProps) => {

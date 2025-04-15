@@ -12,7 +12,7 @@ import {
   type MediaFile
 } from '@/atoms/gallery';
 
-const API_BASE_URL = 'https://api.glowburger.art/api/media';
+const API_BASE_URL = 'https://glowburger.b-cdn.net/';
 
 const formatPathForApi = (folder: string, filename: string) => {
   const formattedFolder = folder.replace(/ /g, '-');
