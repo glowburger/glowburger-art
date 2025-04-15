@@ -292,6 +292,73 @@ const MobileMenuDrawer = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   </>
 );
 
+// First, modify the collectionDescriptions type to support the new structure
+type CollectionDescription = {
+  text: string;
+  links?: { label: string; url: string }[];
+};
+
+const collectionDescriptions: Record<string, CollectionDescription | string> = {
+  'machine garden': {
+    text: 'Latest work-in-progress work inspired by memory, Singlish, and training an AI model on my 8 year old writings.\n\nThe precursor to this work, as part of the Primavera Digitale artist residency 2025, was exhibited in Florence, Italy at the Rifugio Digitale gallery. More coming in 2025.',
+    links: [
+      {
+        label: 'Artwork Vimeo',
+        url: 'https://vimeo.com/1066746941'
+      },
+      {
+        label: 'Chat with model',
+        url: 'https://glowburger.art/chat'
+      }
+    ]
+  },
+  'bob is ded': {
+    text: 'GLOWBURGER presents ‘BOB IS DED’, a Nietzschean-inspired animated short featuring Burger Bob, the irresistible mascot of Blessed Burgers and glowburger DRiP channel. After his physical death, Bob awakens in a metaphysical realm and undergoes a profound metamorphosis. As he confronts creation, loss, and the cyclical nature of existence, he discovers a new purpose in a fragmented world.\n\nThis short animation first premiered at The Projector theatre in Singapore as part of CHOMP\'s ENiGMA event on September 20th, 2024.',
+    links: [
+      {
+        label: 'Full animation',
+        url: 'https://vimeo.com/1066434135'
+      },
+      {
+        label: 'Serial release',
+        url: 'https://drip.haus/glowburger/set/ca0cb032-5800-46ca-b203-1ea2b532e1a3'
+      },
+      {
+        label: 'Read artist notes',
+        url: 'https://x.com/glowburger/status/1711111111111111111'
+      },
+      {
+        label: 'View collectibles',
+        url: 'https://drip.haus/glowburger/set/1e6a9075-9e91-4b15-b500-6b113d4e2254'
+      }
+    ]
+  },
+  'burgers': {
+    text: 'Burger Bob is the mascot of Blessed Burgers, the massive elimination gameshow on the Solana blockchain.\n\nHe\'s also the star of the animated short "BOB IS DED".',
+    links: [
+      {
+        label: 'Burger Game',
+        url: 'https://x.com/blessed_burgers'
+      },
+      {
+        label: 'Blessed Burgers',
+        url: 'https://exp.blessedburgers.co'
+      },
+      {
+        label: 'Collectibles',
+        url: 'https://d.rip/glowburger'
+      }
+    ]
+  },
+  'fun guys': 'Mycological adventures in the digital realm',
+  'genesis': 'Where it all began - the origin stories'
+};
+
+// First, add this helper function near the top of the file
+const createMarkup = (html: string) => {
+  return { __html: html };
+};
+
 const HomePage = () => {
   const [collections, setCollections] = useAtom(collectionsAtom);
   const [, setAllImages] = useAtom(allImagesAtom);
@@ -550,7 +617,8 @@ const HomePage = () => {
         </div>
 
         {/* Tabs Section */}
-        <div className="max-w-screen-xl mx-auto px-6 pb-3">
+        <div className="max-w-screen-xl mx-auto px-6">
+          {/* Tabs Container */}
           <div className="flex gap-2 overflow-x-auto scrollbar-hide">
             <button
               onClick={() => setActiveTab(null)}
@@ -569,19 +637,107 @@ const HomePage = () => {
               'fun guys',
               'genesis'
             ].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`font-mono text-sm px-3 py-1.5 transition-colors whitespace-nowrap cursor-pointer
-                  ${activeTab === tab 
-                    ? 'bg-[#4A4A4A] text-white' 
-                    : 'text-[#4A4A4A] hover:bg-[#4A4A4A]/10'
-                  }`}
-              >
-                {tab.toUpperCase()}
-              </button>
+              <div key={tab} className="relative">
+                <button
+                  onClick={() => setActiveTab(tab)}
+                  className={`
+                    font-mono text-sm px-3 py-1.5 
+                    transition-colors whitespace-nowrap cursor-pointer
+                    ${activeTab === tab 
+                      ? 'bg-[#4A4A4A] text-white border-t border-l border-r border-[#4A4A4A]' 
+                      : 'text-[#4A4A4A] hover:bg-[#4A4A4A]/10'
+                    }
+                  `}
+                >
+                  {tab.toUpperCase()}
+                </button>
+              </div>
             ))}
           </div>
+
+          {/* Description Container - Styled like a folder tab */}
+          {activeTab && (
+            <div 
+              className="
+                relative
+                -mt-[1px]
+                animate-fade-in-up
+                bg-[#4A4A4A]
+                overflow-hidden
+                transition-all duration-300
+                border border-[#4A4A4A]
+              "
+            >
+              {typeof collectionDescriptions[activeTab] === 'string' ? (
+                // Regular single-column layout for other tabs
+                <div 
+                  className="
+                    px-4 py-3
+                    font-mono text-xs text-white/80
+                    bg-[#4A4A4A]
+                  "
+                  dangerouslySetInnerHTML={createMarkup(collectionDescriptions[activeTab] as string)}
+                />
+              ) : (
+                // Two-column layout for machine garden
+                <div className="flex">
+                  {/* Main description */}
+                  <div className="
+                    flex-1
+                    px-4 py-3
+                    font-mono text-xs text-white/80
+                    bg-[#4A4A4A]
+                    border-r border-white/10
+                    whitespace-pre-line
+                  ">
+                    {(collectionDescriptions[activeTab] as CollectionDescription).text}
+                  </div>
+                  
+                  {/* Links section */}
+                  <div className="
+                    w-48
+                    px-4 py-3
+                    font-mono text-xs
+                    bg-[#4A4A4A]
+                  ">
+                    <div className="space-y-2">
+                      {(collectionDescriptions[activeTab] as CollectionDescription).links?.map((link, index) => (
+                        <a
+                          key={index}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="
+                            block
+                            text-white/80
+                            hover:text-white
+                            transition-colors
+                            underline
+                            flex items-center gap-2
+                          "
+                        >
+                          {link.label}
+                          <svg 
+                            className="w-3 h-3" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                          >
+                            <path 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round" 
+                              strokeWidth={2} 
+                              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" 
+                            />
+                          </svg>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </header>
 
